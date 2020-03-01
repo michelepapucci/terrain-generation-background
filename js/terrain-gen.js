@@ -41,10 +41,9 @@ $(function () {
         }
 
         buildTerrain() {
-            const texture = new THREE.TextureLoader().load("texture.jpg");
             const material = new THREE.MeshLambertMaterial({
                 wireframe: true,
-                map: texture
+                color: 0xadaaaa
             });
 
             const plane = new THREE.PlaneGeometry(150, 300, 100, 100);
