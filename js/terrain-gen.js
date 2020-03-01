@@ -1,8 +1,9 @@
 $(function () {
-
     noise.seed(Math.random());
 
     class Terrain {
+
+
         constructor() {
             this.scene = new THREE.Scene();
 
@@ -18,6 +19,11 @@ $(function () {
             this.camera.position.z = 15;
             this.noise = [];
             this.offset = 0.0;
+            this.offset_growth_speed = 0.5;
+
+            this.height_offset = 10;
+            this.p_smoothing = 15;
+
 
             this.bindFuncs();
         }
@@ -47,9 +53,9 @@ $(function () {
             });
 
             const plane = new THREE.PlaneGeometry(150, 300, 100, 100);
-            for (let i = 0, l = plane.vertices.length; i < l; i += 1) {
+            for (let i = 0, l = plane.vertices.length; i < l; i ++) {
                 const {x, y} = plane.vertices[i];
-                const noiseVal = noise.perlin2(x / 15, y / 15) * 5;
+                const noiseVal = noise.perlin2(x / this.p_smoothing, y / this.p_smoothing) * this.height_offset;
                 this.noise.push(noiseVal);
                 plane.vertices[i].z = noiseVal;
             }
@@ -62,12 +68,13 @@ $(function () {
         }
 
         animate() {
+            //Problem might be that when it ends the noise array it just starts it again?
             this.noise.forEach((noiseVal, index) => {
                 const planeIndex = Math.floor((index + this.offset) % this.terrain.geometry.vertices.length);
                 this.terrain.geometry.vertices[planeIndex].z = noiseVal;
             });
 
-            this.offset += 0.5;
+            this.offset += this.offset_growth_speed;
 
             this.terrain.geometry.verticesNeedUpdate = true;
 
