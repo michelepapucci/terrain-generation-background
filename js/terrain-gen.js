@@ -19,7 +19,7 @@ $(function () {
             this.camera.position.z = 15;
             this.noise = [];
             this.offset = 0.0;
-            this.offset_growth_speed = 0.5;
+            this.offset_growth_speed = 0.4;
 
             this.height_offset = 10;
             this.p_smoothing = 15;
