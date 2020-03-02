@@ -72,7 +72,9 @@ $(function () {
             this.noise.forEach((noiseVal, index) => {
                 const planeIndex = Math.floor((index + this.offset) % this.terrain.geometry.vertices.length);
                 this.terrain.geometry.vertices[planeIndex].z = noiseVal;
+                const {x, y} = this.terrain.geometry.vertices[planeIndex];
             });
+            console.log(this.noise);
 
             this.offset += this.offset_growth_speed;
 
@@ -87,6 +89,8 @@ $(function () {
             this.renderer.setViewport(0, 0, size.width, size.height);
             this.renderer.render(this.scene, this.camera);
             this.renderer.setScissorTest(false);
+
+
         }
 
     }
