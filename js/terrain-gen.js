@@ -1,8 +1,6 @@
 $(function () {
     noise.seed(Math.random());
-
     class Terrain {
-
 
         constructor() {
             this.scene = new THREE.Scene();
@@ -19,11 +17,10 @@ $(function () {
             this.camera.position.z = 15;
             this.noise = [];
             this.offset = 0.0;
-            this.offset_growth_speed = 0.4;
-
+            this.offset_growth_speed = 1.5;
+            this.square_dim = 300;
             this.height_offset = 10;
-            this.p_smoothing = 15;
-
+            this.p_smoothing = 10;
 
             this.bindFuncs();
         }
@@ -52,7 +49,7 @@ $(function () {
                 color: 0xadaaaa
             });
 
-            const plane = new THREE.PlaneGeometry(150, 300, 100, 100);
+            const plane = new THREE.PlaneGeometry(150, 300, this.square_dim, this.square_dim);
             for (let i = 0, l = plane.vertices.length; i < l; i ++) {
                 const {x, y} = plane.vertices[i];
                 const noiseVal = noise.perlin2(x / this.p_smoothing, y / this.p_smoothing) * this.height_offset;
@@ -72,9 +69,7 @@ $(function () {
             this.noise.forEach((noiseVal, index) => {
                 const planeIndex = Math.floor((index + this.offset) % this.terrain.geometry.vertices.length);
                 this.terrain.geometry.vertices[planeIndex].z = noiseVal;
-                const {x, y} = this.terrain.geometry.vertices[planeIndex];
             });
-            console.log(this.noise);
 
             this.offset += this.offset_growth_speed;
 
@@ -89,10 +84,7 @@ $(function () {
             this.renderer.setViewport(0, 0, size.width, size.height);
             this.renderer.render(this.scene, this.camera);
             this.renderer.setScissorTest(false);
-
-
         }
-
     }
 
     const msObj = new Terrain();
